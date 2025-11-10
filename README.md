@@ -33,6 +33,38 @@ It is expected that most version bumps will be major.
 
 Here are example [ESLint configuration files](https://eslint.org/docs/latest/use/configure/configuration-files).
 
+### eslint v9+ typescript
+
+eslint.config.ts:
+
+```ts
+import { defineConfig, globalIgnores } from 'eslint/config'
+import { fixupConfigRules } from '@eslint/compat'
+import love from 'eslint-config-love'
+import type { ConfigObject } from '@eslint/core'
+
+
+export default defineConfig([
+  globalIgnores([
+    '.history/**/*',
+    '.git/**/*',
+    'node_modules'
+  ]),
+
+  ...(fixupConfigRules({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- ConfigObject is more narrow than the original FlatConfig.Config
+    ...(love as ConfigObject),
+    files: [
+      'src/**/*.{js,mjs,cjs,ts,mts,cts}',
+      'test/**/*.{js,mjs,cjs,ts,mts,cts}',
+      'eslint.config.ts'
+    ]
+  }))
+])
+```
+
+### eslint prior to v9
+
 ECMAScript Modules:
 
 ```js
